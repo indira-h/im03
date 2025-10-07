@@ -4,35 +4,41 @@ header('Access-Control-Allow-Origin: *');
 
 $range = isset($_GET['range']) ? intval($_GET['range']) : 30;
 
-// Beispiel-API-Endpunkt (Influenza A oder SARS-CoV-2)
-$apiUrl = "https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit" . $range;
+// API-URL für Dataset 100187 (SARS-CoV-2 Abwasser Basel)  
+$apiUrl = "https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?sort=-datum&limit=" . $range;
 
-// API-Daten holen
-$apiResponse = @file_get_contents($apiUrl);
+$ch = curl_init();
+curl_setopt_array($ch, [
+    CURLOPT_URL => $apiUrl,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_SSL_VERIFYPEER => false,
+]);
+$response = curl_exec($ch);
 
-if ($apiResponse === FALSE) {
-    echo json_encode(["error" => "Fehler beim Abrufen der API-Daten"]);
+if ($response === false) {
+    echo json_encode(["error" => "API-Fehler", "details" => curl_error($ch)]);
+    curl_close($ch);
+    exit;
+}
+curl_close($ch);
+
+$data = json_decode($response, true);
+
+if (!isset($data['results']) || !is_array($data['results'])) {
+    echo json_encode(["error" => "Unerwartetes API-Format", "data" => $data], JSON_PRETTY_PRINT);
     exit;
 }
 
-$data = json_decode($apiResponse, true);
-
-// Rohdaten prüfen
-if (!isset($data['results'])) {
-    echo json_encode(["error" => "Unerwartetes API-Format", "data" => $data]);
-    exit;
-}
-
-// Werte extrahieren
 $result = [];
 foreach ($data['results'] as $row) {
     $datum = $row['datum'] ?? null;
-    $viruswert = $row['7t_median_bs_bl'] ?? null;
+    $viruswert = $row['7_tagemedian_of_e_n1_n2_pro_tag_100_000_pers'] ?? null;
 
-    if ($datum && $viruswert !== null) {
+    if ($datum !== null && $viruswert !== null) {
+        $viruswert = floatval($viruswert);
         $risiko = "niedrig";
-        if ($viruswert > 30) $risiko = "hoch";
-        elseif ($viruswert > 15) $risiko = "mittel";
+        if ($viruswert > 60) $risiko = "hoch";
+        elseif ($viruswert > 30) $risiko = "mittel";
 
         $result[] = [
             "datum" => $datum,
@@ -42,4 +48,7 @@ foreach ($data['results'] as $row) {
     }
 }
 
-echo json_encode(array_slice($result, -$range));
+// Älteste zuerst
+$result = array_reverse($result);
+
+echo json_encode(array_slice($result, 0, $range), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
