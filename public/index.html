@@ -6,15 +6,18 @@
   <title>Virus Tracker</title>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Balthazar&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css" />
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <!-- =============== WELCOME =============== -->
+  <!-- ==================== WELCOME SCREEN ==================== -->
   <section id="welcome-screen" class="screen active">
     <div class="title-banner">
       <h1>VIRUS TRACKER</h1>
@@ -31,14 +34,14 @@
     </div>
   </section>
 
-  <!-- =============== TRACKER =============== -->
+  <!-- ==================== TRACKER SCREEN ==================== -->
   <section id="tracker-screen" class="screen hidden">
 
     <!-- Deko-Ecken -->
-    <img class="decor decor-tl" src="img/virus-corner-left.png" alt="" />
-    <img class="decor decor-bl" src="img/virus-corner-left.png" alt="" />
-    <img class="decor decor-tr" src="img/virus-corner-right.png" alt="" />
-    <img class="decor decor-br" src="img/virus-corner-right.png" alt="" />
+    <img class="decor decor-tl" src="../images/virus.png" alt="">
+    <img class="decor decor-tr" src="../images/virus.png" alt="">
+    <img class="decor decor-bl" src="../images/virus.png" alt="">
+    <img class="decor decor-br" src="../images/virus.png" alt="">
 
     <header class="tracker-header">
       <div class="tracker-title">VIRUS TRACKER</div>
@@ -50,23 +53,23 @@
     </header>
 
     <main>
-      <!-- Chart Card -->
+      <!-- Diagramm -->
       <div class="chart-card">
         <span class="axis-label axis-x">TAGE</span>
         <span class="axis-label axis-y">ANZAHL VIREN IM ABWASSER</span>
         <canvas id="virusChart" height="160"></canvas>
       </div>
 
-      <!-- Risk status -->
+      <!-- Risikoanzeige -->
       <div class="risk-wrap">
-        <h2 class="risk-title">MOMENTAN: <span id="risk-text">HOHES RISIKO</span></h2>
+        <h2 class="risk-title" id="risk-text">MOMENTAN: HOHES RISIKO</h2>
         <p class="risk-legend">
           GERINGES RISIKO BIS VIRENMENGE X / MÄSSIGES RISIKO BIS VIRENMENGE XY /
           HOHES RISIKO AB VIRENMENGE XV
         </p>
       </div>
 
-      <!-- Fazit Box -->
+      <!-- Fazit -->
       <section class="fazit">
         <h3>FAZIT</h3>
         <p>
@@ -80,6 +83,7 @@
     </main>
   </section>
 
+  <!-- ==================== SCRIPT ==================== -->
   <script src="main.js"></script>
 </body>
 </html>
