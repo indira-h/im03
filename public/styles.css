@@ -1,0 +1,139 @@
+/* Grundstil */
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    color: #f5bdfc;
+    background: radial-gradient(circle at center, #2b0033, #0a0011);
+    background-image: url('../images/virus-bg.jpg'); /* später optional */
+    background-size: cover;
+    background-position: center;
+}
+
+/* Zentrierung */
+#welcome-screen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-container {
+    text-align: center;
+    background-color: rgba(20, 0, 40, 0.8);
+    padding: 2rem;
+    border-radius: 30px;
+    box-shadow: 0 0 40px rgba(255, 0, 255, 0.2);
+}
+
+/* Titel */
+.title {
+    font-family: 'Anton', sans-serif;
+    color: #ff9ffb;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Textbox */
+.welcome-box {
+    background-color: rgba(40, 0, 60, 0.8);
+    padding: 2rem;
+    border-radius: 25px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Text */
+.welcome-box h2 {
+    margin-top: 0;
+    color: #e0a9f0;
+}
+
+.welcome-box p {
+    line-height: 1.6;
+}
+
+/* Button */
+#start-btn {
+    background-color: #ffb3e6;
+    color: #330033;
+    border: none;
+    border-radius: 5px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#start-btn:hover {
+    background-color: #ffccf0;
+    transform: scale(1.05);
+}
+
+/* Unsichtbar */
+.hidden {
+    display: none;
+}
+
+/* -------- Tracker Screen -------- */
+#tracker-screen {
+    text-align: center;
+    color: #ffbdfc;
+    padding: 2rem;
+}
+
+/* Header */
+.tracker-title {
+    font-family: 'Anton', sans-serif;
+    color: #ff9ffb;
+    margin-bottom: 1rem;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.time-btn {
+    background-color: #ffb3e6;
+    color: #2a0030;
+    border: none;
+    border-radius: 5px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+}
+
+.time-btn.active {
+    background-color: #40e0ff;
+    color: #1a0030;
+}
+
+.time-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Chart */
+.chart-container {
+    width: 80%;
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(20, 0, 40, 0.8);
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+}
+
+/* Risiko-Anzeige */
+.risk-status {
+    margin-top: 2rem;
+}
+
+#risk-text span {
+    color: #40e0ff;
+    font-weight: bold;
+    font-size: 1.5rem;
+}

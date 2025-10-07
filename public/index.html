@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virus Tracker</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Schriftart -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Startscreen -->
+    <section id="welcome-screen" class="screen active">
+        <div class="welcome-container">
+            <h1 class="title">VIRUS TRACKER</h1>
+            <div class="welcome-box">
+                <h2>Herzlich willkommen</h2>
+                <p>
+                    Unser Virus-Tracker zeigt dir, wann die Aktivität von Krankheitserregern besonders hoch ist 
+                    und in welchen Zeiträumen erhöhte Vorsicht ratsam ist – damit du bestens informiert 
+                    und gesund durch den Winter kommst.
+                </p>
+                <button id="start-btn">Los geht’s!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hauptinhalt (kommt später mit Chart etc.) -->
+    <section id="tracker-screen" class="screen hidden">
+        <header>
+            <h1 class="tracker-title">VIRUS TRACKER</h1>
+            <div class="button-group">
+                <button class="time-btn active" data-range="30">Letzte 30 Tage</button>
+                <button class="time-btn" data-range="14">Letzte 14 Tage</button>
+                <button class="time-btn" data-range="7">Letzte 7 Tage</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="chart-container">
+                <canvas id="virusChart"></canvas>
+            </div>
+
+            <div class="risk-status">
+                <h2 id="risk-text">Momentan: <span>Hohes Risiko</span></h2>
+                <p>Geringes Risiko bis Virenmenge X / Mässiges Risiko bis Virenmenge XY / Hohes Risiko ab Virenmenge XV</p>
+            </div>
+        </main>
+    </section>
+
+    <script src="main.js"></script>
+</body>
+</html>
