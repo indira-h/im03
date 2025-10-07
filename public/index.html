@@ -1,59 +1,85 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Virus Tracker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Tracker</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Schriftart -->
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <!-- Startscreen -->
-    <section id="welcome-screen" class="screen active">
-        <div class="welcome-container">
-            <h1 class="title">VIRUS TRACKER</h1>
-            <div class="welcome-box">
-                <h2>Herzlich willkommen</h2>
-                <p>
-                    Unser Virus-Tracker zeigt dir, wann die Aktivität von Krankheitserregern besonders hoch ist 
-                    und in welchen Zeiträumen erhöhte Vorsicht ratsam ist – damit du bestens informiert 
-                    und gesund durch den Winter kommst.
-                </p>
-                <button id="start-btn">Los geht’s!</button>
-            </div>
-        </div>
-    </section>
+  <!-- =============== WELCOME =============== -->
+  <section id="welcome-screen" class="screen active">
+    <div class="title-banner">
+      <h1>VIRUS TRACKER</h1>
+    </div>
 
-    <!-- Hauptinhalt (kommt später mit Chart etc.) -->
-    <section id="tracker-screen" class="screen hidden">
-        <header>
-            <h1 class="tracker-title">VIRUS TRACKER</h1>
-            <div class="button-group">
-                <button class="time-btn active" data-range="30">Letzte 30 Tage</button>
-                <button class="time-btn" data-range="14">Letzte 14 Tage</button>
-                <button class="time-btn" data-range="7">Letzte 7 Tage</button>
-            </div>
-        </header>
+    <div class="welcome-box">
+      <h2>Herzlich willkommen</h2>
+      <p>
+        Unser Virus-Tracker zeigt dir, wann die Aktivität von Krankheitserregern besonders hoch ist
+        und in welchen Zeiträumen erhöhte Vorsicht ratsam ist – damit du bestens informiert und
+        gesund durch den Winter kommst.
+      </p>
+      <button id="start-btn" class="cta">Los geht’s!</button>
+    </div>
+  </section>
 
-        <main>
-            <div class="chart-container">
-                <canvas id="virusChart"></canvas>
-            </div>
+  <!-- =============== TRACKER =============== -->
+  <section id="tracker-screen" class="screen hidden">
 
-            <div class="risk-status">
-                <h2 id="risk-text">Momentan: <span>Hohes Risiko</span></h2>
-                <p>Geringes Risiko bis Virenmenge X / Mässiges Risiko bis Virenmenge XY / Hohes Risiko ab Virenmenge XV</p>
-            </div>
-        </main>
-    </section>
+    <!-- Deko-Ecken -->
+    <img class="decor decor-tl" src="img/virus-corner-left.png" alt="" />
+    <img class="decor decor-bl" src="img/virus-corner-left.png" alt="" />
+    <img class="decor decor-tr" src="img/virus-corner-right.png" alt="" />
+    <img class="decor decor-br" src="img/virus-corner-right.png" alt="" />
 
-    <script src="main.js"></script>
+    <header class="tracker-header">
+      <div class="tracker-title">VIRUS TRACKER</div>
+      <div class="button-group">
+        <button class="time-btn active" data-range="30">Letzte 30 Tage</button>
+        <button class="time-btn" data-range="14">Letzte 14 Tage</button>
+        <button class="time-btn" data-range="7">Letzte 7 Tage</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Chart Card -->
+      <div class="chart-card">
+        <span class="axis-label axis-x">TAGE</span>
+        <span class="axis-label axis-y">ANZAHL VIREN IM ABWASSER</span>
+        <canvas id="virusChart" height="160"></canvas>
+      </div>
+
+      <!-- Risk status -->
+      <div class="risk-wrap">
+        <h2 class="risk-title">MOMENTAN: <span id="risk-text">HOHES RISIKO</span></h2>
+        <p class="risk-legend">
+          GERINGES RISIKO BIS VIRENMENGE X / MÄSSIGES RISIKO BIS VIRENMENGE XY /
+          HOHES RISIKO AB VIRENMENGE XV
+        </p>
+      </div>
+
+      <!-- Fazit Box -->
+      <section class="fazit">
+        <h3>FAZIT</h3>
+        <p>
+          Die Auswertung der Abwasserdaten für die Grippesaison 2025 zeigt, dass die Konzentration von
+          Influenzaviren bereits im frühen Dezember anstieg. Insgesamt bleiben die Viruslasten moderat.
+          Die Abwassermessungen deuten auf eine vergleichsweise kurze, aber früh einsetzende Welle hin.
+          Diese datenbasierte Überwachung bestätigt die Wirksamkeit der bisherigen Präventionsmassnahmen
+          und liefert wertvolle Hinweise für die Planung künftiger Schutzstrategien.
+        </p>
+      </section>
+    </main>
+  </section>
+
+  <script src="main.js"></script>
 </body>
 </html>

@@ -1,139 +1,137 @@
-/* Grundstil */
-body {
-    margin: 0;
-    font-family: 'Open Sans', sans-serif;
-    color: #f5bdfc;
-    background: radial-gradient(circle at center, #2b0033, #0a0011);
-    background-image: url('../images/virus-bg.jpg'); /* später optional */
-    background-size: cover;
-    background-position: center;
-}
-
-/* Zentrierung */
 #welcome-screen {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background: url("/images/virus-bg.jpg") center/cover no-repeat fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.welcome-container {
-    text-align: center;
-    background-color: rgba(20, 0, 40, 0.8);
-    padding: 2rem;
-    border-radius: 30px;
-    box-shadow: 0 0 40px rgba(255, 0, 255, 0.2);
+:root{
+  --bg1:#2a0d3a;
+  --bg2:#1a0a26;
+  --panel:#ffffff;
+  --ink:#1b0f24;
+  --pink:#f3a6d6;
+  --cyan:#49e2f2;
+  --lav:#ffbdfc;
+  --card:#22072e;
 }
 
-/* Titel */
-.title {
-    font-family: 'Anton', sans-serif;
-    color: #ff9ffb;
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
+/* Base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:#f6eafb;
+  background: radial-gradient(1100px at 50% -10%, #4f1c76, var(--bg2)) fixed;
+  overflow-x:hidden;
+}
+h1,h2,h3{margin:0}
+.screen{min-height:100vh; position:relative; padding:2rem 1rem}
+.hidden{display:none}
+
+/* ===== Welcome ===== */
+.title-banner{
+  max-width:980px; margin:3rem auto 2rem;
+  background: rgba(18, 0, 35, .72);
+  border-radius: 28px;
+  padding:1.5rem 2rem;
+  backdrop-filter: blur(2px);
+  text-align:center;
+}
+.title-banner h1{
+  font-family: Anton, Impact, system-ui;
+  letter-spacing:.06em;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  color:#ff9ffb;
 }
 
-/* Textbox */
-.welcome-box {
-    background-color: rgba(40, 0, 60, 0.8);
-    padding: 2rem;
-    border-radius: 25px;
-    max-width: 600px;
-    margin: 0 auto;
+.welcome-box{
+  max-width:980px; margin:0 auto;
+  background: rgba(25,0,45,.78);
+  border-radius: 28px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  text-align:center;
+  box-shadow: 0 0 40px rgba(255,0,255,.18);
+}
+.welcome-box h2{ color:#e9b5ff; font-weight:800; margin-bottom:.75rem }
+.welcome-box p{ line-height:1.65; max-width:900px; margin:0 auto 1.25rem }
+.cta{
+  background: var(--pink); color:#2a0030;
+  border:0; border-radius:10px; padding:.9rem 2.2rem;
+  font-weight:800; cursor:pointer; transition: transform .15s ease, opacity .15s;
+}
+.cta:hover{ transform: translateY(-1px); opacity:.95 }
+
+/* ===== Tracker ===== */
+.tracker-header{ text-align:center; margin:1rem 0 1.25rem }
+.tracker-title{
+  font-family: Anton, Impact, system-ui;
+  color:#ff9ffb;
+  font-size: clamp(1.1rem, 3.2vw, 1.6rem);
+  letter-spacing:.06em;
+  margin-bottom:.75rem;
+}
+.button-group{ display:flex; gap:.9rem; justify-content:center; flex-wrap:wrap }
+.time-btn{
+  background: var(--pink); color:#2a0030; border:0; cursor:pointer;
+  padding:.6rem 1.2rem; border-radius:12px; font-weight:800;
+  transition: transform .15s ease, filter .15s ease;
+}
+.time-btn.active{ background: var(--cyan); color:#0d0723 }
+.time-btn:hover{ transform: translateY(-1px) }
+
+/* Chart Card */
+.chart-card{
+  position:relative; width:min(920px, 90vw); margin:1rem auto 1.6rem;
+  background:#fff; color:#000; border-radius:26px; padding:1rem 1rem 1.25rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,.3);
+}
+.axis-label{
+  position:absolute; font-weight:800; color:#000; opacity:.8; letter-spacing:.08em
+}
+.axis-x{ left:12px; bottom:8px; font-style:italic }
+.axis-y{
+  right:-14px; top:50%; transform:translateY(-50%) rotate(-90deg);
+  transform-origin:right center; font-style:italic
 }
 
-/* Text */
-.welcome-box h2 {
-    margin-top: 0;
-    color: #e0a9f0;
+.risk-wrap{ text-align:center; margin: 1.25rem 0 2.25rem }
+.risk-title{
+  font-family: Anton, Impact, system-ui;
+  font-size: clamp(1.4rem, 4.6vw, 2.2rem);
+  color:#aef6ff; letter-spacing:.04em;
 }
+.risk-title span{ color:#46e6f1 }
+.risk-legend{ opacity:.9; font-size:.86rem; letter-spacing:.04em }
 
-.welcome-box p {
-    line-height: 1.6;
+/* Fazit */
+.fazit{
+  position:relative;
+  width:min(980px, 92vw);
+  margin: 0 auto 3rem;
+  background: rgba(25,0,45,.82);
+  border-radius:26px;
+  padding:1.25rem 1.25rem 1.6rem;
+  box-shadow: 0 0 30px rgba(0,0,0,.25);
+  text-align:center;
 }
-
-/* Button */
-#start-btn {
-    background-color: #ffb3e6;
-    color: #330033;
-    border: none;
-    border-radius: 5px;
-    padding: 0.8rem 2rem;
-    font-size: 1.2rem;
-    margin-top: 1.5rem;
-    cursor: pointer;
-    transition: 0.3s;
+.fazit h3{
+  color:#e7b0ff; font-weight:900; letter-spacing:.18em; margin-bottom:.5rem
 }
+.fazit p{ line-height:1.65; margin:0 auto; max-width:860px }
 
-#start-btn:hover {
-    background-color: #ffccf0;
-    transform: scale(1.05);
-}
+/* Decorative corner images (optional) */
+.decor{ position:fixed; width:300px; opacity:.85; pointer-events:none; filter:drop-shadow(0 6px 12px rgba(0,0,0,.3)) }
+.decor-tl{ top:-30px; left:-30px; transform: rotate(-14deg) }
+.decor-bl{ bottom:-50px; left:-50px; transform: rotate(6deg) }
+.decor-tr{ top:-30px; right:-30px; transform: scaleX(-1) rotate(-10deg) }
+.decor-br{ bottom:-50px; right:-50px; transform: scaleX(-1) rotate(8deg) }
 
-/* Unsichtbar */
-.hidden {
-    display: none;
-}
-
-/* -------- Tracker Screen -------- */
-#tracker-screen {
-    text-align: center;
-    color: #ffbdfc;
-    padding: 2rem;
-}
-
-/* Header */
-.tracker-title {
-    font-family: 'Anton', sans-serif;
-    color: #ff9ffb;
-    margin-bottom: 1rem;
-}
-
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.time-btn {
-    background-color: #ffb3e6;
-    color: #2a0030;
-    border: none;
-    border-radius: 5px;
-    padding: 0.6rem 1.2rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: bold;
-}
-
-.time-btn.active {
-    background-color: #40e0ff;
-    color: #1a0030;
-}
-
-.time-btn:hover {
-    transform: scale(1.05);
-}
-
-/* Chart */
-.chart-container {
-    width: 80%;
-    max-width: 700px;
-    margin: 0 auto;
-    background: rgba(20, 0, 40, 0.8);
-    padding: 1rem;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
-}
-
-/* Risiko-Anzeige */
-.risk-status {
-    margin-top: 2rem;
-}
-
-#risk-text span {
-    color: #40e0ff;
-    font-weight: bold;
-    font-size: 1.5rem;
+/* Small screens */
+@media (max-width:640px){
+  .chart-card{ padding:.6rem .6rem 1rem }
+  .axis-y{ right:-18px; font-size:.8rem }
 }
