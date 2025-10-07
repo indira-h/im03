@@ -2,38 +2,44 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-// 🔗 Verbindung zur Datenbank
-require_once __DIR__ . '/../config/config.php';
-
-// 🕒 Parameter: Zeitraum in Tagen (Standard: 30)
 $range = isset($_GET['range']) ? intval($_GET['range']) : 30;
 
-try {
-    // 📊 SQL-Abfrage: letzte X Tage abrufen
-    $stmt = $pdo->prepare("
-        SELECT datum, viruswert, risiko_level
-        FROM virus_data
-        WHERE datum >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
-        ORDER BY datum ASC
-    ");
-    $stmt->execute(['days' => $range]);
+// Beispiel-API-Endpunkt (Influenza A oder SARS-CoV-2)
+$apiUrl = "https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit" . $range;
 
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// API-Daten holen
+$apiResponse = @file_get_contents($apiUrl);
 
-    // 🔄 Wenn keine Daten gefunden wurden, Dummy-Daten als Fallback
-    if (empty($data)) {
-        $data = [
-            ["datum" => date('Y-m-d', strtotime('-6 days')), "viruswert" => 5, "risiko_level" => "niedrig"],
-            ["datum" => date('Y-m-d', strtotime('-5 days')), "viruswert" => 9, "risiko_level" => "mittel"],
-            ["datum" => date('Y-m-d', strtotime('-4 days')), "viruswert" => 12, "risiko_level" => "hoch"]
-        ];
-    }
-
-    echo json_encode($data);
-
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Database query failed', 'details' => $e->getMessage()]);
+if ($apiResponse === FALSE) {
+    echo json_encode(["error" => "Fehler beim Abrufen der API-Daten"]);
     exit;
 }
-?>
+
+$data = json_decode($apiResponse, true);
+
+// Rohdaten prüfen
+if (!isset($data['results'])) {
+    echo json_encode(["error" => "Unerwartetes API-Format", "data" => $data]);
+    exit;
+}
+
+// Werte extrahieren
+$result = [];
+foreach ($data['results'] as $row) {
+    $datum = $row['datum'] ?? null;
+    $viruswert = $row['7t_median_bs_bl'] ?? null;
+
+    if ($datum && $viruswert !== null) {
+        $risiko = "niedrig";
+        if ($viruswert > 30) $risiko = "hoch";
+        elseif ($viruswert > 15) $risiko = "mittel";
+
+        $result[] = [
+            "datum" => $datum,
+            "viruswert" => $viruswert,
+            "risiko_level" => $risiko
+        ];
+    }
+}
+
+echo json_encode(array_slice($result, -$range));
