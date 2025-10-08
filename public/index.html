@@ -37,12 +37,7 @@
   <!-- ==================== TRACKER SCREEN ==================== -->
   <section id="tracker-screen" class="screen hidden">
 
-    <!-- Deko-Ecken -->
-    <img class="decor decor-tl" src="../images/virus.png" alt="">
-    <img class="decor decor-tr" src="../images/virus.png" alt="">
-    <img class="decor decor-bl" src="../images/virus.png" alt="">
-    <img class="decor decor-br" src="../images/virus.png" alt="">
-
+    <!-- ======= Header mit Button-Bereich ======= -->
     <header class="tracker-header">
       <div class="tracker-title">VIRUS TRACKER</div>
       <div class="button-group">
@@ -50,8 +45,12 @@
         <button class="time-btn" data-range="14">Letzte 14 Tage</button>
         <button class="time-btn" data-range="7">Letzte 7 Tage</button>
       </div>
+
+      <!-- Virusgrafik hinter den Buttons -->
+      <img class="virus-bg behind-buttons" src="../images/virus.png" alt="">
     </header>
 
+    <!-- ======= Hauptinhalt ======= -->
     <main>
       <!-- Diagramm -->
       <div class="chart-card">
@@ -69,6 +68,10 @@
         </p>
       </div>
 
+      <!-- Dekorative Viren rund um Fazit -->
+      <img class="virus-bg virus-behind-fazit" src="../images/virus.png" alt="">
+      <img class="virus-bg virus-front-fazit" src="../images/virus.png" alt="">
+
       <!-- Fazit -->
       <section class="fazit">
         <h3>FAZIT</h3>
@@ -85,5 +88,6 @@
 
   <!-- ==================== SCRIPT ==================== -->
   <script src="main.js"></script>
+  
 </body>
 </html>

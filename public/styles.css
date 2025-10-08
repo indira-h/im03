@@ -30,8 +30,8 @@ html, body {
 body {
   margin: 0;
   font-family: 'Balthazar', serif;
-  font-size: 1.15rem; /* vorher war ca. 1rem = Standardgröße */
-  line-height: 1.7;   /* sorgt für bessere Lesbarkeit */
+  font-size: 1.15rem;
+  line-height: 1.7;
   color: #f6eafb;
   background: radial-gradient(1100px at 50% -10%, #4f1c76, var(--bg2)) fixed;
   overflow-x: hidden;
@@ -39,7 +39,7 @@ body {
 
 h1, h2, h3 {
   margin: 0;
-  font-family: 'Bangers', cursive; /* Überschrift-Schrift */
+  font-family: 'Bangers', cursive;
   letter-spacing: 0.05em;
 }
 
@@ -148,43 +148,51 @@ h1, h2, h3 {
   transform: translateY(-1px);
 }
 
-/* Chart Card */
+/* ===== Chart Card ===== */
 .chart-card {
   position: relative;
   width: min(920px, 90vw);
-  margin: 1rem auto 1.6rem;
+  margin: 2rem auto 3.2rem; /* mehr Luft oben/unten */
   background: #fff;
   color: #000;
   border-radius: 26px;
-  padding: 1rem 1rem 1.25rem;
+  padding: 1.5rem 1rem 2.6rem; /* zusätzlicher Platz unten für "TAGE" */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
-.axis-label {
+/* ===== Achsenbeschriftungen ===== */
+.axis-y {
   position: absolute;
-  font-weight: 800;
-  color: #000;
-  opacity: 0.8;
-  letter-spacing: 0.08em;
+  top: -35px; /* oberhalb der weißen Box */
+  left: 35px;
+  font-style: italic;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
 
 .axis-x {
-  left: 12px;
-  bottom: 8px;
+  position: absolute;
+  bottom: -50px; /* unterhalb der weißen Box */
+  left: 50%;
+  transform: translateX(-50%);
   font-style: italic;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
 
-.axis-y {
-  right: -14px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: right center;
-  font-style: italic;
-}
-
+/* ===== Risikoanzeige ===== */
 .risk-wrap {
   text-align: center;
-  margin: 1.25rem 0 2.25rem;
+  margin-top: 3.5rem; /* mehr Abstand von "TAGE" */
+  margin-bottom: 2.5rem;
 }
 
 .risk-title {
@@ -193,17 +201,13 @@ h1, h2, h3 {
   letter-spacing: 0.04em;
 }
 
-.risk-title span {
-  color: #46e6f1;
-}
-
 .risk-legend {
   opacity: 0.9;
   font-size: 0.86rem;
   letter-spacing: 0.04em;
 }
 
-/* Fazit */
+/* ===== Fazit ===== */
 .fazit {
   position: relative;
   width: min(980px, 92vw);
@@ -228,77 +232,49 @@ h1, h2, h3 {
   max-width: 860px;
 }
 
-/* Decorative corner images */
-.decor {
+/* ================== Viren am Rand ================== */
+.virus-bg {
   position: fixed;
-  width: 300px;
-  opacity: 0.85;
   pointer-events: none;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4));
+  animation: float 8s ease-in-out infinite alternate;
+  opacity: 0.6;
+  z-index: 0;
 }
 
-.decor-tl {
-  top: -30px;
-  left: -30px;
-  transform: rotate(-14deg);
+.virus-tl {
+  top: 0;
+  left: 0;
+  width: 180px;
 }
 
-.decor-bl {
-  bottom: -50px;
-  left: -50px;
-  transform: rotate(6deg);
+.virus-tr {
+  top: 0;
+  right: 0;
+  width: 180px;
 }
 
-.decor-tr {
-  top: -30px;
-  right: -30px;
-  transform: scaleX(-1) rotate(-10deg);
+.virus-bl {
+  bottom: 0;
+  left: 0;
+  width: 180px;
 }
 
-.decor-br {
-  bottom: -50px;
-  right: -50px;
-  transform: scaleX(-1) rotate(8deg);
+.virus-br {
+  bottom: 0;
+  right: 0;
+  width: 180px;
 }
 
-/* Small screens */
-@media (max-width: 640px) {
-  .chart-card {
-    padding: 0.6rem 0.6rem 1rem;
+/* 🌬️ Schwebe-Animation */
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
   }
-
-  .axis-y {
-    right: -18px;
-    font-size: 0.8rem;
+  50% {
+    transform: translateY(-8px) rotate(2deg);
   }
-}
-
-#chart-container {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 6px;
-  height: 300px;
-  width: 80%;
-  margin: 2rem auto;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.bar {
-  width: 18px;
-  border-radius: 4px;
-  transition: height 0.4s ease, background 0.3s ease;
-}
-
-.bar[data-level="hoch"] {
-  background-color: #e74c3c;
-}
-.bar[data-level="mittel"] {
-  background-color: #f1c40f;
-}
-.bar[data-level="niedrig"] {
-  background-color: #2ecc71;
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
 }

@@ -1,4 +1,11 @@
-// ===== Daten von der API laden =====
+// ===== Sanftes Scrollen beim Klick auf Scroll-Button =====
+document.getElementById('scrollButton')?.addEventListener('click', function() {
+  document.getElementById('info-section')?.scrollIntoView({
+    behavior: 'smooth'
+  });
+});
+
+// ===== Daten von der API laden ===== 
 async function getDataFromAPI(range = 30) {
   try {
     const response = await fetch(`../api/data.php?range=${range}`);
@@ -47,7 +54,7 @@ async function renderChart(range = 30) {
   const sum = a => a.reduce((s, x) => s + x, 0);
   const mean = a => sum(a) / a.length;
   const xbar = mean(xs),
-    ybar = mean(values);
+        ybar = mean(values);
   const m =
     sum(xs.map((x, i) => (x - xbar) * (values[i] - ybar))) /
     sum(xs.map(x => (x - xbar) ** 2 || 1));
