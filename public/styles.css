@@ -202,25 +202,26 @@ h1, h2, h3 {
   z-index: 10;
 }
 
-/* ===== Risikoanzeige ===== */
-.risk-wrap {
+/* ===== Abstand der Risikoanzeige präzise anpassen ===== */
+#tracker-screen .risk-wrap {
   text-align: center;
-  margin-top: 2rem;       /* weniger Abstand zu "TAGE" (vorher 3.8rem) */
-  margin-bottom: 1.5rem;  /* geringerer Abstand zur Legende unten */
+  margin-top: 0.3rem !important;      /* näher an "TAGE" */
+  margin-bottom: 0.8rem !important;   /* halbierter Abstand nach unten */
 }
 
-.risk-title {
+#tracker-screen .risk-title {
   font-size: clamp(1.4rem, 4.6vw, 2.2rem);
   color: #aef6ff;
   letter-spacing: 0.04em;
-  margin-bottom: 0.4rem;  /* kleiner Abstand zur Legende */
+  margin-top: 0.2rem !important;      /* rückt weiter nach oben */
+  margin-bottom: 0.15rem !important;  /* dichter an der Legende */
 }
 
-.risk-legend {
+#tracker-screen .risk-legend {
   opacity: 0.9;
   font-size: 0.86rem;
   letter-spacing: 0.04em;
-  margin-top: 0.2rem;     /* enger an den grünen Text heran */
+  margin-top: 0.1rem !important;      /* halbierter Abstand */
 }
 
 
@@ -249,49 +250,3 @@ h1, h2, h3 {
   max-width: 860px;
 }
 
-/* ================== Viren am Rand ================== */
-.virus-bg {
-  position: fixed;
-  pointer-events: none;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4));
-  animation: float 8s ease-in-out infinite alternate;
-  opacity: 0.6;
-  z-index: 0;
-}
-
-.virus-tl {
-  top: 0;
-  left: 0;
-  width: 180px;
-}
-
-.virus-tr {
-  top: 0;
-  right: 0;
-  width: 180px;
-}
-
-.virus-bl {
-  bottom: 0;
-  left: 0;
-  width: 180px;
-}
-
-.virus-br {
-  bottom: 0;
-  right: 0;
-  width: 180px;
-}
-
-/* 🌬️ Schwebe-Animation */
-@keyframes float {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(2deg);
-  }
-  100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-}

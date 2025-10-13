@@ -31,6 +31,9 @@ async function renderChart(range = 30) {
     return;
   }
 
+  // 🟢 Sortiere Daten nach Datum (ältestes links, neuestes rechts)
+  daten.sort((a, b) => new Date(a.datum) - new Date(b.datum));
+
   // Daten für Chart.js vorbereiten
   const values = daten.map(d => d.viruswert);
   const labels = daten.map(d => {
@@ -47,7 +50,7 @@ async function renderChart(range = 30) {
     i === values.length - 1 ? '#49e2f2' : '#2a1830'
   );
 
-  // Trendlinie berechnen
+  // ===== Trendlinie berechnen =====
   const n = values.length;
   const xs = values.map((_, i) => i + 1);
   const sum = a => a.reduce((s, x) => s + x, 0);
@@ -60,39 +63,38 @@ async function renderChart(range = 30) {
   const b = ybar - m * xbar;
   const trend = xs.map(x => m * x + b);
 
-// ===== Risiko berechnen (basierend auf letztem Messwert) =====
-const lastValue = values[values.length - 1]; // aktuellster Wert = letzte Säule
-const riskEl = document.getElementById('risk-text');
+  // ===== Risiko berechnen (basierend auf letztem Messwert) =====
+  const lastValue = values[values.length - 1]; // aktuellster Wert = letzte Säule
+  const riskEl = document.getElementById('risk-text');
 
-let riskText = "";
-let riskColor = "";
+  let riskText = "";
+  let riskColor = "";
 
-// Farb- und Textlogik
-if (lastValue < 5e11) {
-  riskText = "MOMENTAN: GERINGES RISIKO";
-  riskColor = "#2ecc71"; // grün
-} else if (lastValue < 1.5e12) {
-  riskText = "MOMENTAN: MÄSSIGES RISIKO";
-  riskColor = "#f1c40f"; // gelb
-} else {
-  riskText = "MOMENTAN: HOHES RISIKO";
-  riskColor = "#e74c3c"; // rot
-}
+  // Farb- und Textlogik
+  if (lastValue < 5e11) {
+    riskText = "MOMENTAN: GERINGES RISIKO";
+    riskColor = "#2ecc71"; // grün
+  } else if (lastValue < 1.5e12) {
+    riskText = "MOMENTAN: MÄSSIGES RISIKO";
+    riskColor = "#f1c40f"; // gelb
+  } else {
+    riskText = "MOMENTAN: HOHES RISIKO";
+    riskColor = "#e74c3c"; // rot
+  }
 
-// Sanfte Farb- und Skalierungsanimation
-riskEl.style.transition = "color 0.8s ease, transform 0.4s ease";
-riskEl.textContent = riskText;
-riskEl.style.color = riskColor;
-riskEl.style.transform = "scale(1.15)";
-setTimeout(() => {
-  riskEl.style.transform = "scale(1)";
-}, 400);
-
+  // Sanfte Farb- und Skalierungsanimation
+  riskEl.style.transition = "color 0.8s ease, transform 0.4s ease";
+  riskEl.textContent = riskText;
+  riskEl.style.color = riskColor;
+  riskEl.style.transform = "scale(1.15)";
+  setTimeout(() => {
+    riskEl.style.transform = "scale(1)";
+  }, 400);
 
   // Alten Chart zerstören, falls vorhanden
   if (chart) chart.destroy();
 
-  // Neuen Chart zeichnen
+  // ===== Neuen Chart zeichnen =====
   chart = new Chart(ctx, {
     data: {
       labels,
@@ -122,7 +124,7 @@ setTimeout(() => {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => `Viruslast: ${ctx.parsed.y}`
+            label: ctx => `Viruslast: ${ctx.parsed.y.toLocaleString('de-CH')}`
           }
         }
       },
@@ -151,14 +153,12 @@ if (startBtn) {
     // 🟢 Sanftes Scrollen direkt zum Tracker-Bereich
     setTimeout(() => {
       tracker.scrollIntoView({ behavior: 'smooth' });
-    }, 300); // kleine Verzögerung, bis der Screen sichtbar ist
+    }, 300);
   });
 }
 
-
 // ===== Buttons für Zeiträume (7/14/30 Tage) =====
 const rangeButtons = document.querySelectorAll('.time-btn');
-
 rangeButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     rangeButtons.forEach(b => b.classList.remove('active'));
@@ -167,3 +167,5 @@ rangeButtons.forEach(btn => {
     renderChart(range);
   });
 });
+
+

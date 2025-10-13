@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 $range = isset($_GET['range']) ? intval($_GET['range']) : 30;
 
 // API-URL für Dataset 100187 (SARS-CoV-2 Abwasser Basel)  
-$apiUrl = "https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?sort=-datum&limit=" . $range;
+$apiUrl = "https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?sort=datum&limit=" . $range;
 
 $ch = curl_init();
 curl_setopt_array($ch, [
@@ -49,6 +49,4 @@ foreach ($data['results'] as $row) {
 }
 
 // Älteste zuerst
-$result = array_reverse($result);
-
 echo json_encode(array_slice($result, 0, $range), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
