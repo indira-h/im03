@@ -1,11 +1,11 @@
-// ===== Sanftes Scrollen beim Klick auf Scroll-Button =====
+//  Scrollen beim Klick auf Scroll-Button
 document.getElementById('scrollButton')?.addEventListener('click', function() {
   document.getElementById('info-section')?.scrollIntoView({
     behavior: 'smooth'
   });
 });
 
-// ===== Daten von der API laden ===== 
+// Daten von der API laden 
 async function getDataFromAPI(range = 30) {
   try {
     const response = await fetch(`../api/data.php?range=${range}`);
@@ -18,23 +18,23 @@ async function getDataFromAPI(range = 30) {
   }
 }
 
-// ===== Chart rendern =====
-let chart; // Chart.js-Instanz
+// Chart laden
+let chart; 
 
 async function renderChart(range = 30) {
   const ctx = document.getElementById('virusChart').getContext('2d');
   const daten = await getDataFromAPI(range);
 
-  // Wenn keine Daten vorhanden sind → abbrechen
+  // Wenn keine Daten vorhanden sind --> abbrechen
   if (!daten || daten.length === 0) {
     console.error("Keine Daten empfangen!");
     return;
   }
 
-  // 🟢 Sortiere Daten nach Datum (ältestes links, neuestes rechts)
+  // Sortiere der Daten (ältestes Daten links, neuestes Daten rechts)
   daten.sort((a, b) => new Date(a.datum) - new Date(b.datum));
 
-  // Daten für Chart.js vorbereiten
+  // vorbereiten Daten für Chart.js
   const values = daten.map(d => d.viruswert);
   const labels = daten.map(d => {
     const date = new Date(d.datum);
@@ -45,12 +45,12 @@ async function renderChart(range = 30) {
     });
   });
 
-  // Farben: letzte Säule cyan
+  // Farben: letzte Säule blue
   const colors = values.map((_, i) =>
     i === values.length - 1 ? '#49e2f2' : '#2a1830'
   );
 
-  // ===== Trendlinie berechnen =====
+  // Trendlinie berechnen
   const n = values.length;
   const xs = values.map((_, i) => i + 1);
   const sum = a => a.reduce((s, x) => s + x, 0);
@@ -63,26 +63,26 @@ async function renderChart(range = 30) {
   const b = ybar - m * xbar;
   const trend = xs.map(x => m * x + b);
 
-  // ===== Risiko berechnen (basierend auf letztem Messwert) =====
-  const lastValue = values[values.length - 1]; // aktuellster Wert = letzte Säule
+  // Risiko berechnen (basierend auf letztem Messwert) 
+  const lastValue = values[values.length - 1]; // aktuellster Wert --> letzte Säule
   const riskEl = document.getElementById('risk-text');
 
   let riskText = "";
   let riskColor = "";
 
-  // Farb- und Textlogik
+  // Farbgebung der unterschiedlichen Risiskostufen
   if (lastValue < 5e11) {
     riskText = "MOMENTAN: GERINGES RISIKO";
-    riskColor = "#2ecc71"; // grün
+    riskColor = "#2ecc71"; 
   } else if (lastValue < 1.5e12) {
     riskText = "MOMENTAN: MÄSSIGES RISIKO";
-    riskColor = "#f1c40f"; // gelb
+    riskColor = "#f1c40f"; 
   } else {
     riskText = "MOMENTAN: HOHES RISIKO";
-    riskColor = "#e74c3c"; // rot
+    riskColor = "#e74c3c"; 
   }
 
-  // Sanfte Farb- und Skalierungsanimation
+  // Farb- und Skalierungsanimation
   riskEl.style.transition = "color 0.8s ease, transform 0.4s ease";
   riskEl.textContent = riskText;
   riskEl.style.color = riskColor;
@@ -91,10 +91,10 @@ async function renderChart(range = 30) {
     riskEl.style.transform = "scale(1)";
   }, 400);
 
-  // Alten Chart zerstören, falls vorhanden
+  // Alten Chart löschen, falls vorhanden
   if (chart) chart.destroy();
 
-  // ===== Neuen Chart zeichnen =====
+  // Neuen Chart zeichnen
   chart = new Chart(ctx, {
     data: {
       labels,
@@ -139,7 +139,7 @@ async function renderChart(range = 30) {
   });
 }
 
-// ===== Welcome Screen Steuerung =====
+// Welcome Screen Steuerung
 const welcome = document.getElementById('welcome-screen');
 const tracker = document.getElementById('tracker-screen');
 const startBtn = document.getElementById('start-btn');
@@ -148,16 +148,16 @@ if (startBtn) {
   startBtn.addEventListener('click', () => {
     welcome.classList.add('hidden');
     tracker.classList.remove('hidden');
-    renderChart(30); // Standardmäßig 30 Tage laden
+    renderChart(30); // Standardmässig 30 Tage laden
 
-    // 🟢 Sanftes Scrollen direkt zum Tracker-Bereich
+    // Scrollen direkt zum Tracker-Bereich
     setTimeout(() => {
       tracker.scrollIntoView({ behavior: 'smooth' });
     }, 300);
   });
 }
 
-// ===== Buttons für Zeiträume (7/14/30 Tage) =====
+// Buttons für Zeiträume 7/14/30 Tage
 const rangeButtons = document.querySelectorAll('.time-btn');
 rangeButtons.forEach(btn => {
   btn.addEventListener('click', () => {

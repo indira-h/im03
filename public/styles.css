@@ -18,7 +18,6 @@
   --card: #22072e;
 }
 
-/* ===== Base ===== */
 * {
   box-sizing: border-box;
 }
@@ -53,7 +52,6 @@ h1, h2, h3 {
   display: none;
 }
 
-/* ===== Welcome ===== */
 .title-banner {
   max-width: 980px;
   margin: 3rem auto 2rem;
@@ -108,7 +106,7 @@ h1, h2, h3 {
   opacity: 0.95;
 }
 
-/* ===== Tracker ===== */
+/* Tracker */
 .tracker-header {
   text-align: center;
   margin: 1rem 0 1.25rem;
@@ -119,8 +117,8 @@ h1, h2, h3 {
   font-size: clamp(2.2rem, 5vw, 3.6rem);
   letter-spacing: 0.06em;
   margin-bottom: 0.75rem;
-  font-family: 'Bangers', cursive; /* <- gleiche Schriftart */
-  text-transform: uppercase;       /* <- sorgt für Großbuchstaben */
+  font-family: 'Bangers', cursive;
+  text-transform: uppercase;
 }
 
 .button-group {
@@ -150,34 +148,34 @@ h1, h2, h3 {
   transform: translateY(-1px);
 }
 
-/* ===== Chart Card ===== */
+/* Chart Card */
 .chart-card {
   position: relative;
   width: min(920px, 90vw);
-  margin: 2rem auto 3.2rem; /* mehr Luft oben/unten */
+  margin: 2rem auto 3.2rem;
   background: #fff;
   color: #000;
   border-radius: 26px;
-  padding: 1.5rem 1rem 2.6rem; /* zusätzlicher Platz unten für "TAGE" */
+  padding: 1.5rem 1rem 2.6rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== Chart Card ===== */
+/* Chart Card */
 .chart-card {
   position: relative;
   width: min(920px, 90vw);
-  margin: 2.5rem auto 3rem; /* genug Luft oben/unten */
+  margin: 2.5rem auto 3rem;
   background: #fff;
   color: #000;
   border-radius: 26px;
-  padding: 1.5rem 1rem 2.4rem; /* etwas mehr Platz unten für "TAGE" */
+  padding: 1.5rem 1rem 2.4rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== Achsenbeschriftungen ===== */
+/* Achsenbeschriftungen */
 .axis-y {
   position: absolute;
-  top: -25px; /* oberhalb der weißen Box, weiter weg von Buttons */
+  top: -25px;
   left: 35px;
   font-style: italic;
   color: #ffffff;
@@ -190,7 +188,7 @@ h1, h2, h3 {
 
 .axis-x {
   position: absolute;
-  bottom: -25px; /* etwas näher an der Tabelle */
+  bottom: -25px;
   left: 50%;
   transform: translateX(-50%);
   font-style: italic;
@@ -202,30 +200,30 @@ h1, h2, h3 {
   z-index: 10;
 }
 
-/* ===== Abstand der Risikoanzeige präzise anpassen ===== */
+/* Abstand der Risikoanzeige präzise anpassen */
 #tracker-screen .risk-wrap {
   text-align: center;
-  margin-top: 0.3rem !important;      /* näher an "TAGE" */
-  margin-bottom: 0.8rem !important;   /* halbierter Abstand nach unten */
+  margin-top: 0.3rem !important;
+  margin-bottom: 0.8rem !important;
 }
 
 #tracker-screen .risk-title {
   font-size: clamp(1.4rem, 4.6vw, 2.2rem);
   color: #aef6ff;
   letter-spacing: 0.04em;
-  margin-top: 0.2rem !important;      /* rückt weiter nach oben */
-  margin-bottom: 0.15rem !important;  /* dichter an der Legende */
+  margin-top: 0.2rem !important;
+  margin-bottom: 0.15rem !important;
 }
 
 #tracker-screen .risk-legend {
   opacity: 0.9;
   font-size: 0.86rem;
   letter-spacing: 0.04em;
-  margin-top: 0.1rem !important;      /* halbierter Abstand */
+  margin-top: 0.1rem !important;
 }
 
 
-/* ===== Fazit ===== */
+/* Fazit */
 .fazit {
   position: relative;
   width: min(980px, 92vw);

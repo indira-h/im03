@@ -1,4 +1,3 @@
-sftp.jason
-*db_config.php
-*.mp4
-*.mov
+config/config.php
+.vscode/
+sftp.json

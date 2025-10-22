@@ -1,15 +1,37 @@
 <?php
 include("../config/config.php");
 
-$apiUrl = "https://api.opendisease.sh/v3/covid-19/historical/switzerland?lastdays=30";
-$json = file_get_contents($apiUrl);
-$data = json_decode($json, true);
+// Holt Daten aus API
+$apiUrl = "https://im03.ch/api/data.php?range=30";
 
-foreach ($data['timeline']['cases'] as $date => $value) {
-    $stmt = $pdo->prepare("INSERT INTO virus_data (datum, viruswert, risiko_level) VALUES (?, ?, ?)");
-    $risiko = $value > 20000 ? 'hoch' : ($value > 10000 ? 'mittel' : 'niedrig');
-    $stmt->execute([$date, $value, $risiko]);
+// Daten herunterladen (cURL)
+$ch = curl_init();
+curl_setopt_array($ch, [
+    CURLOPT_URL => $apiUrl,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_SSL_VERIFYPEER => false
+]);
+$json = curl_exec($ch);
+if (curl_errno($ch)) {
+    die("API-Fehler: " . curl_error($ch));
+}
+curl_close($ch);
+
+// JSON umwandeln
+$data = json_decode($json, true);
+if (!is_array($data)) {
+    die("Keine gültigen Daten erhalten!");
 }
 
-echo "Import abgeschlossen.";
+// In Datenbank speichern
+foreach ($data as $row) {
+    $datum = $row["datum"];
+    $wert = $row["viruswert"];
+    $risiko = $row["risiko_level"];
+
+    $stmt = $pdo->prepare("INSERT INTO virus_data (datum, viruswert, risiko_level) VALUES (?, ?, ?)");
+    $stmt->execute([$datum, $wert, $risiko]);
+}
+
+echo "Import abgeschlossen (lokale API).";
 ?>
