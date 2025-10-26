@@ -94,4 +94,3 @@ Wir mussten oft ausprobieren, testen und Fehler suchen.
 Auch die rote Trendlinie hat uns viele Nerven gekostet, bis wir mit Hilfe von W3Schools endlich eine funktionierende Lösung fanden.  
 Durch diese Schwierigkeiten haben wir viel gelernt vor allem Geduld, und das man villeicht mal die Arbeit auf die Seite legt un am nächsten Tag das ganze nochmals genau anschaut.  
 Besonders schön war zu sehen, wie wir immer ein Stück näher an unser Ziel näherkamen.
-
