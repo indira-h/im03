@@ -156,18 +156,6 @@ h1, h2, h3 {
   background: #fff;
   color: #000;
   border-radius: 26px;
-  padding: 1.5rem 1rem 2.6rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-}
-
-/* Chart Card */
-.chart-card {
-  position: relative;
-  width: min(920px, 90vw);
-  margin: 2.5rem auto 3rem;
-  background: #fff;
-  color: #000;
-  border-radius: 26px;
   padding: 1.5rem 1rem 2.4rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }

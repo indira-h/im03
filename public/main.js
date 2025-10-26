@@ -5,25 +5,56 @@ document.getElementById('scrollButton')?.addEventListener('click', function() {
   });
 });
 
-// Daten von der API laden 
+/// Daten der API laden
 async function getDataFromAPI(range = 30) {
   try {
     const response = await fetch(`../api/data.php?range=${range}`);
-    const data = await response.json();
-    console.log("Empfangene Daten:", data);
-    return data;
-  } catch (error) {
-    console.error("Fehler beim Laden:", error);
+    const raw = await response.json();
+
+    console.log("Empfangene Daten (roh):", raw);
+
+    // Falls Daten verschachtelt kommen (z.B. { results: [...] })
+    const data = Array.isArray(raw) ? raw : raw.results || [];
+
+    //Nur valide Einträge mit Datum & Wert
+    const validData = data
+      .map(entry => {
+        // Datum extrahieren (egal wie verschachtelt)
+        const date = entry.datum || entry.date || entry.fields?.datum || entry.fields?.date;
+        const value = entry.viruswert ?? entry["7_tagemedian_of_e_n1_n2_pro_tag_100_000_pers"] ?? entry.fields?.viruswert ?? entry.fields?.["7_tagemedian_of_e_n1_n2_pro_tag_100_000_pers"];
+        return date && value ? { datum: date, viruswert: value } : null;
+      })
+      .filter(Boolean); // nur echte Werte
+
+    // Nur 1x pro Tag
+    const uniqueByDate = new Map();
+    validData.forEach(entry => {
+      const dateKey = entry.datum.split("T")[0]; // Nur Datumsteil
+      if (!uniqueByDate.has(dateKey)) {
+        uniqueByDate.set(dateKey, entry);
+      }
+    });
+
+    // Sortiere Datum
+    const cleaned = Array.from(uniqueByDate.values()).sort(
+      (a, b) => new Date(a.datum) - new Date(b.datum)
+    );
+
+    console.log("Gefilterte, eindeutige Tagesdaten:", cleaned);
+    return cleaned;
+
+  } catch (err) {
+    console.error("Fehler beim Laden:", err);
     return [];
   }
 }
 
-// Chart laden
+// CHART LADEN
 let chart; 
 
 async function renderChart(range = 30) {
   const ctx = document.getElementById('virusChart').getContext('2d');
-  const daten = await getDataFromAPI(range);
+  let daten = await getDataFromAPI(range);
 
   // Wenn keine Daten vorhanden sind --> abbrechen
   if (!daten || daten.length === 0) {
@@ -31,10 +62,15 @@ async function renderChart(range = 30) {
     return;
   }
 
-  // Sortiere der Daten (ältestes Daten links, neuestes Daten rechts)
-  daten.sort((a, b) => new Date(a.datum) - new Date(b.datum));
+  // Sicherheitshalber nochmal doppelte Tage filtern
+  const uniqueByDate = new Map();
+  daten.forEach(entry => {
+    const dateKey = entry.datum.split("T")[0];
+    if (!uniqueByDate.has(dateKey)) uniqueByDate.set(dateKey, entry);
+  });
+  daten = Array.from(uniqueByDate.values());
 
-  // vorbereiten Daten für Chart.js
+  // Daten vorbereiten
   const values = daten.map(d => d.viruswert);
   const labels = daten.map(d => {
     const date = new Date(d.datum);
@@ -45,32 +81,28 @@ async function renderChart(range = 30) {
     });
   });
 
-  // Farben: letzte Säule blue
+  // Farben: letzte Säule blau
   const colors = values.map((_, i) =>
     i === values.length - 1 ? '#49e2f2' : '#2a1830'
   );
 
-  // Trendlinie berechnen
+  //Trendlinie berechnen
   const n = values.length;
   const xs = values.map((_, i) => i + 1);
   const sum = a => a.reduce((s, x) => s + x, 0);
   const mean = a => sum(a) / a.length;
-  const xbar = mean(xs),
-        ybar = mean(values);
+  const xbar = mean(xs), ybar = mean(values);
   const m =
     sum(xs.map((x, i) => (x - xbar) * (values[i] - ybar))) /
     sum(xs.map(x => (x - xbar) ** 2 || 1));
   const b = ybar - m * xbar;
   const trend = xs.map(x => m * x + b);
 
-  // Risiko berechnen (basierend auf letztem Messwert) 
-  const lastValue = values[values.length - 1]; // aktuellster Wert --> letzte Säule
+  // Risiko berechnen
+  const lastValue = values[values.length - 1];
   const riskEl = document.getElementById('risk-text');
+  let riskText = "", riskColor = "";
 
-  let riskText = "";
-  let riskColor = "";
-
-  // Farbgebung der unterschiedlichen Risiskostufen
   if (lastValue < 5e11) {
     riskText = "MOMENTAN: GERINGES RISIKO";
     riskColor = "#2ecc71"; 
@@ -82,16 +114,14 @@ async function renderChart(range = 30) {
     riskColor = "#e74c3c"; 
   }
 
-  // Farb- und Skalierungsanimation
+  // Animation für Risikoanzeige
   riskEl.style.transition = "color 0.8s ease, transform 0.4s ease";
   riskEl.textContent = riskText;
   riskEl.style.color = riskColor;
   riskEl.style.transform = "scale(1.15)";
-  setTimeout(() => {
-    riskEl.style.transform = "scale(1)";
-  }, 400);
+  setTimeout(() => riskEl.style.transform = "scale(1)", 400);
 
-  // Alten Chart löschen, falls vorhanden
+  // Alten Chart löschen
   if (chart) chart.destroy();
 
   // Neuen Chart zeichnen
@@ -139,7 +169,7 @@ async function renderChart(range = 30) {
   });
 }
 
-// Welcome Screen Steuerung
+//  WELCOME SCREEN STEUERUNG 
 const welcome = document.getElementById('welcome-screen');
 const tracker = document.getElementById('tracker-screen');
 const startBtn = document.getElementById('start-btn');
@@ -149,15 +179,11 @@ if (startBtn) {
     welcome.classList.add('hidden');
     tracker.classList.remove('hidden');
     renderChart(30); // Standardmässig 30 Tage laden
-
-    // Scrollen direkt zum Tracker-Bereich
-    setTimeout(() => {
-      tracker.scrollIntoView({ behavior: 'smooth' });
-    }, 300);
+    setTimeout(() => tracker.scrollIntoView({ behavior: 'smooth' }), 300);
   });
 }
 
-// Buttons für Zeiträume 7/14/30 Tage
+//  BUTTON-STEUERUNG (7/14/30 Tage) 
 const rangeButtons = document.querySelectorAll('.time-btn');
 rangeButtons.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -167,5 +193,3 @@ rangeButtons.forEach(btn => {
     renderChart(range);
   });
 });
-
-

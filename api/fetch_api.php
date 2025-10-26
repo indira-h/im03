@@ -1,10 +1,10 @@
 <?php
 include("../config/config.php");
 
-// Holt Daten aus API
+// Externe API-Quelle
 $apiUrl = "https://im03.ch/api/data.php?range=30";
 
-// Daten herunterladen (cURL)
+// Daten herunterladen (cURL) 
 $ch = curl_init();
 curl_setopt_array($ch, [
     CURLOPT_URL => $apiUrl,
@@ -17,21 +17,37 @@ if (curl_errno($ch)) {
 }
 curl_close($ch);
 
-// JSON umwandeln
+//  JSON in Array umwandeln
 $data = json_decode($json, true);
 if (!is_array($data)) {
     die("Keine gültigen Daten erhalten!");
 }
 
 // In Datenbank speichern
-foreach ($data as $row) {
-    $datum = $row["datum"];
-    $wert = $row["viruswert"];
-    $risiko = $row["risiko_level"];
+$sql = "
+    INSERT INTO virus_data (datum, viruswert, risiko_level)
+    VALUES (:datum, :wert, :risiko)
+    ON DUPLICATE KEY UPDATE 
+        viruswert = VALUES(viruswert),
+        risiko_level = VALUES(risiko_level)
+";
+$stmt = $pdo->prepare($sql);
 
-    $stmt = $pdo->prepare("INSERT INTO virus_data (datum, viruswert, risiko_level) VALUES (?, ?, ?)");
-    $stmt->execute([$datum, $wert, $risiko]);
+$inserted = 0;
+foreach ($data as $row) {
+    if (!isset($row["datum"]) || !isset($row["viruswert"])) continue;
+
+    $datum  = date("Y-m-d", strtotime($row["datum"])); 
+    $wert   = (float)$row["viruswert"];
+    $risiko = $row["risiko_level"] ?? null;
+
+    $stmt->execute([
+        ':datum'  => $datum,
+        ':wert'   => $wert,
+        ':risiko' => $risiko
+    ]);
+    $inserted++;
 }
 
-echo "Import abgeschlossen (lokale API).";
+echo "Import abgeschlossen: $inserted Einträge aktualisiert oder hinzugefügt.";
 ?>
