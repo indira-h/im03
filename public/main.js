@@ -35,10 +35,14 @@ async function getDataFromAPI(range = 30) {
       }
     });
 
-    // Sortiere Datum
-    const cleaned = Array.from(uniqueByDate.values()).sort(
-      (a, b) => new Date(a.datum) - new Date(b.datum)
-    );
+    // Sortiere Datum (neutral, ohne Zeitzonen-Effekt)
+    const cleaned = Array.from(uniqueByDate.values()).sort((a, b) => {
+      const pa = a.datum.split("-").map(Number);
+      const pb = b.datum.split("-").map(Number);
+      const da = new Date(pa[0], pa[1] - 1, pa[2]);
+      const db = new Date(pb[0], pb[1] - 1, pb[2]);
+      return da - db;
+    });
 
     console.log("Gefilterte, eindeutige Tagesdaten:", cleaned);
     return cleaned;
@@ -73,11 +77,13 @@ async function renderChart(range = 30) {
   // Daten vorbereiten
   const values = daten.map(d => d.viruswert);
   const labels = daten.map(d => {
-    const date = new Date(d.datum);
+    // Jahr, Monat, Tag einzeln lesen — kein Zeitzonen-Fehler
+    const parts = d.datum.split("-");
+    const date = new Date(parts[0], parts[1] - 1, parts[2]);
     return date.toLocaleDateString('de-CH', {
       day: '2-digit',
       month: '2-digit',
-      year: '2-digit'
+      year: 'numeric' // zeigt echtes Jahr (z. B. 2021)
     });
   });
 

@@ -1,35 +1,53 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=utf-8');
 
+// Verbindung Datenbank
 require_once __DIR__ . '/../config/config.php';
 
-// Bereich (z. B. 7 / 14 / 30 Tage) Standard: 30
-$range = isset($_GET['range']) ? intval($_GET['range']) : 30;
-
-// Daten aus  eigener Datenbank lesen
 try {
+    // Range bestimmen (Standard: 30 Tage)
+    $range = isset($_GET['range']) ? intval($_GET['range']) : 30;
+    if ($range <= 0) $range = 30;
+
+    // Letzte X Datensätze abrufen (egal vom Datum)
     $stmt = $pdo->prepare("
-    SELECT DATE(datum) AS datum, viruswert, risiko_level
-    FROM virus_data
-    GROUP BY DATE(datum)
-    ORDER BY DATE(datum) DESC
-    LIMIT :range
-
-");
-
+        SELECT datum, viruswert, risiko_level
+        FROM virus_data
+        ORDER BY datum DESC
+        LIMIT :range
+    ");
     $stmt->bindValue(':range', $range, PDO::PARAM_INT);
     $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $data = $stmt->fetchAll();
 
-    // Älteste zuerst
-    $rows = array_reverse($rows);
+    // Prüfen ob Daten vorhanden
+    if (!$data || count($data) === 0) {
+        echo json_encode(['message' => ' Keine Daten in der Datenbank gefunden.']);
+        exit;
+    }
 
-    echo json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    // aufsteigend sortieren 
+    $data = array_reverse($data);
+
+    // Ausgabe formatieren
+    $formatted = array_map(function($row) {
+        return [
+            'datum' => $row['datum'],
+            'viruswert' => (float)$row['viruswert'],
+            'risiko_level' => $row['risiko_level']
+        ];
+    }, $data);
+
+    // JSON-Ausgabe 
+    echo json_encode($formatted, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
 } catch (PDOException $e) {
+    //  Fehlerbehandlung
     http_response_code(500);
     echo json_encode([
-        "error" => "DB-Fehler",
-        "details" => $e->getMessage()
+        'error' => 'Datenbankfehler',
+        'details' => $e->getMessage()
     ]);
+    exit;
 }
+?>

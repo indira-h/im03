@@ -1,7 +1,6 @@
 <?php
 // Diese Datei dient als VORLAGE für die echte config.php, hier sind extra keine Passwörter eingetragen.
 
-
 // Verbindungseinstellungen zur Datenbank
 $host = 'your-hostname';
 $db   = 'your-database-name';

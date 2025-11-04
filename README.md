@@ -8,7 +8,7 @@ Die Daten kommen von einer öffentlichen Quelle und werden automatisch in einer 
 Man kann auswählen, ob man die letzten 7, 14 oder 30 Tage sehen will.  
 Eine farbige Anzeige zeigt, ob das Risiko niedrig, mittel oder hoch ist.  
 So kann man einfach sehen, wie sich die Viruslage verändert.
-
+Das System berechnet automatisch einen Trendverlauf und zeigt durch eine Linie an, ob die Viruskonzentration steigt oder sinkt.
 ## Technische Umsetzung
 - Frontend: HTML / CSS / JavaScript
 - Backend: PHP / MySQL
@@ -18,13 +18,14 @@ So kann man einfach sehen, wie sich die Viruslage verändert.
 1. **Extract:** `fetch_api.php` ruft offene Abwasserdaten von Basel ab.  
 2. **Transform:** Es wird berechnet, ob das Risiko niedrig, mittel oder hoch ist. (Geringes Risiko bis 0.5 Billionen Viren / Mässiges Risiko bis 1.5 Billionen Viren / Hohes Risiko ab 1.5 Billionen Viren) 
 3. **Load:** Speicherung in der Datenbanktabelle `virus_data`.  
-4. **Unload:** `data.php` liefert Daten für 7, 14 oder 30 Tage ans Frontend.  
+4. **Unload:** `data.php` liefert Daten für 7, 14 oder 30 Tage ans Frontend. Dabei wird sichergestellt, dass doppelte Einträge vermieden werden und alle Datumswerte eindeutig bleiben.
 
 **Frontend-Funktionen:**  
 - Dynamischer Zeitraumwechsel (7 / 14 / 30 Tage)  
 - Automatische Trendlinie (lineare Regression)  
 - Farblich codiertes Risiko-Level (Grün, Gelb, Rot)  
-- Sanfte Animationen, responsives Design  
+- Sanfte Animationen, responsives Design 
+- Die letzte Säule wird farblich hervorgehoben, um den aktuellsten Messwert zu betonen.
 
 ## Learnings
 - Verständnis des ETL-Prozesses (Daten holen, umwandeln, speichern, anzeigen)  
@@ -32,6 +33,8 @@ So kann man einfach sehen, wie sich die Viruslage verändert.
 - Arbeiten mit Datenbanken SQL
 - Organisation eines Projekts über GitHub und Infomaniak 
 - Bedeutung von sauberer Datenstruktur und Fehlerbehandlung  
+- Verständnis, wie Frontend und Backend über JSON-Schnittstellen kommunizieren
+- Sicherer Umgang mit PDO und prepared statements für stabile und sichere Datenbankabfragen 
 
 ## Schwierigkeiten
 
@@ -40,6 +43,7 @@ So kann man einfach sehen, wie sich die Viruslage verändert.
   Ich dachte zuerst, der Fehler liege im JavaScript, bis ich merkte,  
   dass meine Datenbank erst wenige Datensätze enthielt, 
   die 30-Tage-Ansicht konnte deshalb schlicht noch nicht genug Daten anzeigen.
+  Nach der korrekten Integration der API und des Datenimports funktionierte der Zeitraumfilter wie geplant.
 
 - **Layout und Achsenbeschriftung:**  
   Es war schwierig, die Beschriftung „Anzahl Viren im Abwasser“ und „Tage“  
@@ -64,7 +68,7 @@ So kann man einfach sehen, wie sich die Viruslage verändert.
 - **Datenbank-Synchronisierung:**  
   Mehrfaches Importieren führte zu doppelten Einträgen.  
   Ich lernte, über `ON DUPLICATE KEY UPDATE` zu arbeiten,  
-  um Daten konsistent zu halten.
+  um Daten konsistent zu halten. Dadurch wurde der Importprozess deutlich effizienter und stabiler.
 
 ## Einsatz von KI / Hilfsmitteln
 
