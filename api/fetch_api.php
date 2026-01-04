@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=utf-8');
 require_once __DIR__ . '/../config/config.php';
 
 // URL API
-$apiUrl = 'https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit=500';
+$apiUrl = 'https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit=500&order_by=datum%20desc';
 
 // cURL statt file_get_contents (da allow_url_fopen deaktiviert ist)
 $ch = curl_init();
