@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=utf-8');
 require_once __DIR__ . '/../config/config.php';
 
 // URL API
-$apiUrl = 'https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit=500&order_by=datum%20desc';
+$apiUrl = 'https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit=100&order_by=datum%20desc';
 
 // cURL statt file_get_contents (da allow_url_fopen deaktiviert ist)
 $ch = curl_init();
@@ -15,8 +15,17 @@ curl_setopt_array($ch, [
 ]);
 
 $response = curl_exec($ch);
+$curlErr  = curl_error($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
+
+if ($httpCode !== 200 || !$response) {
+  echo "API-Fehler: HTTP $httpCode\n";
+  echo "cURL-Error: $curlErr\n";
+  echo "URL: $apiUrl\n";
+  echo "Response:\n" . htmlspecialchars($response ?? '') . "\n";
+  exit;
+}
 
 // Fehlerbehandlung API-Antwort
 if ($httpCode !== 200 || !$response) {

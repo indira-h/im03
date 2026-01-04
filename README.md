@@ -9,6 +9,19 @@ Man kann auswählen, ob man die letzten 7, 14 oder 30 Tage sehen will.
 Eine farbige Anzeige zeigt, ob das Risiko niedrig, mittel oder hoch ist.  
 So kann man einfach sehen, wie sich die Viruslage verändert.
 Das System berechnet automatisch einen Trendverlauf und zeigt durch eine Linie an, ob die Viruskonzentration steigt oder sinkt.
+
+### Hinweis zur Datenquelle und zeitlichen Einordnung
+Zu Beginn des Projekts bin ich davon ausgegangen, dass die verwendete Abwasser-API ausschliesslich Daten aus dem Jahr 2021 liefert. Aus diesem Grund habe ich anfänglich Teile der Darstellung sowie Texte auf das Jahr 2021 angepasst. Ich ging davon aus, dass es sich um eine abgeschlossene oder zyklische API handelt.
+
+Durch eine gezielte Abfrage der API mit folgendem Endpunkt:
+https://data.bs.ch/api/explore/v2.1/catalog/datasets/100187/records?limit=1&order_by=datum%20desc
+
+wurde mir klar, dass es sich um einen **laufend aktualisierten Datensatz** handelt, der bis Ende 2025 reicht. Die API liefert somit nicht nur historische Daten aus dem Jahr 2021, sondern auch aktuelle Messwerte.
+
+Anfangs bestand zudem die Sorge, dass beim Übergang ins Jahr 2026 weiterhin nur Daten aus 2025 angezeigt würden. Nach genauerer Analyse stellte sich jedoch heraus, dass Abwasserdaten nicht in Echtzeit veröffentlicht werden. Aufgrund von Probenentnahme, Laboranalysen, Qualitätskontrollen sowie Feiertagen kann die Veröffentlichung neuer Daten **7–14 Tage verzögert** erfolgen.
+
+Zum Zeitpunkt der Auswertung (04.01.2026) stellt der letzte Datensatz vom **25.12.2025** somit den aktuellsten verfügbaren Stand dar. Sobald neue Daten für 2026 veröffentlicht werden, werden diese automatisch importiert und im Dashboard angezeigt.
+
 ## Technische Umsetzung
 - Frontend: HTML / CSS / JavaScript
 - Backend: PHP / MySQL
@@ -34,7 +47,9 @@ Das System berechnet automatisch einen Trendverlauf und zeigt durch eine Linie a
 - Organisation eines Projekts über GitHub und Infomaniak 
 - Bedeutung von sauberer Datenstruktur und Fehlerbehandlung  
 - Verständnis, wie Frontend und Backend über JSON-Schnittstellen kommunizieren
-- Sicherer Umgang mit PDO und prepared statements für stabile und sichere Datenbankabfragen 
+- Sicherer Umgang mit PDO und prepared statements für stabile und sichere Datenbankabfragen
+- Verständnis dafür, dass öffentliche Datensätze nicht immer Echtzeitdaten liefern und zeitliche Verzögerungen fachlich korrekt interpretiert werden müssen
+
 
 ## Schwierigkeiten
 
@@ -70,6 +85,10 @@ Das System berechnet automatisch einen Trendverlauf und zeigt durch eine Linie a
   Ich lernte, über `ON DUPLICATE KEY UPDATE` zu arbeiten,  
   um Daten konsistent zu halten. Dadurch wurde der Importprozess deutlich effizienter und stabiler.
 
+  - **Zeitliche Einordnung der Daten:**  
+  Zu Beginn ging ich davon aus, dass die API ausschliesslich Daten aus dem Jahr 2021 liefert. Erst durch gezielte API-Abfragen verstand ich, dass der Datensatz laufend aktualisiert wird. Die Herausforderung bestand darin, die scheinbar „veralteten“ Daten korrekt einzuordnen und zu verstehen, dass Analyse- und Publikationsverzögerungen von 7–14 Tagen – insbesondere über Feiertage – normal sind.
+
+
 ## Einsatz von KI / Hilfsmitteln
 
 Ich habe KI (ChatGPT) bewusst genutzt um Verständnisfragen eingesetzt,z. B.:  
@@ -95,6 +114,7 @@ Dieses Projekt war für uns beide eine  Herausforderung, aber auch eine wertvoll
 Am Anfang war vieles neu, vor allem, wie man Daten speichert und dann auf einer Webseite sichtbar macht.  
 Mit der Zeit haben wir verstanden, wie die einzelnen Teile zusammenarbeiten.  
 Wir mussten oft ausprobieren, testen und Fehler suchen.
-Auch die rote Trendlinie hat uns viele Nerven gekostet, bis wir mit Hilfe von W3Schools endlich eine funktionierende Lösung fanden.  
+Auch die rote Trendlinie hat uns viele Nerven gekostet, bis wir mit Hilfe von W3Schools endlich eine funktionierende Lösung fanden. 
+Lehrreich war das Verständnis dafür, dass technische Korrektheit allein nicht ausreicht, sondern Daten auch fachlich richtig interpretiert werden müssen. Der Umgang mit zeitlich verzögerten Messwerten hat mein Verständnis für reale Datenquellen und deren Grenzen deutlich verbessert.
 Durch diese Schwierigkeiten haben wir viel gelernt vor allem Geduld, und das man villeicht mal die Arbeit auf die Seite legt un am nächsten Tag das ganze nochmals genau anschaut.  
 Besonders schön war zu sehen, wie wir immer ein Stück näher an unser Ziel näherkamen.
